@@ -1,11 +1,14 @@
 package com.amit.pixelweightcalculation;
 
-public class EuclidianPixelWeightCalculator implements PixelWeightCalculator {
+/**
+ * Euclidean-distance-based pixel weight calculator
+ * */
+public class EuclideanPixelWeightCalculator implements PixelWeightCalculator {
 
     private int z;
     private float epsilon;
 
-    public EuclidianPixelWeightCalculator(int z, float epsilon) {
+    public EuclideanPixelWeightCalculator(int z, float epsilon) {
         this.z = z;
         this.epsilon = epsilon;
     }

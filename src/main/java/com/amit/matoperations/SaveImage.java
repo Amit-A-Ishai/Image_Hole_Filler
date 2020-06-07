@@ -3,6 +3,9 @@ package com.amit.matoperations;
 import com.amit.ImageUtil;
 import org.opencv.core.Mat;
 
+/**
+ * Save an image (received as a Mat) in the designated path
+ * */
 public class SaveImage implements MatOperation {
 
     private final String savePath;

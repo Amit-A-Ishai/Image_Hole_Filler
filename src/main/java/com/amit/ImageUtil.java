@@ -5,12 +5,18 @@ import org.opencv.core.Mat;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+/**
+ * Utility class for image loading, saving, pre and post processing
+ * */
 public class ImageUtil {
 
     private static final int CV_TYPE = CvType.CV_8UC1;
 
     public static Mat load(String filename){
         Mat mat = Imgcodecs.imread(filename);
+
+        // TODO error handling
+
         return mat;
     }
 
@@ -40,6 +46,16 @@ public class ImageUtil {
         return mat;
     }
 
+    /**
+     * Carve a hole out of the image, and scale
+     *
+     * @param image a grey scale input image
+     * @param mask hole mask (hole values are denoted by a 0 value. As a side note,
+     *             some image creating programs (e.g., Microsoft Paint) do not use an exact 0 while coloring,
+     *             hence these values are taken with an empirical tolerance.)
+     * @param holeValue the value to fill holes with
+     * @param scaleFactor the scale factor for the greyscale values
+     * */
     public static float[][] carveHole(Mat image, Mat mask, float holeValue, float scaleFactor){
 
         assert Comparisons.sizesEqual(image.size(), mask.size()) : "Image size doesn't equal mask size";

@@ -1,5 +1,6 @@
 package com.amit;
 
+import com.amit.model.Point;
 import com.amit.neighbourfinding.NeighbourFinder;
 
 import java.util.ArrayList;
@@ -8,27 +9,36 @@ public class ImageProcessing {
 
     public enum PixelConnectivity { FOUR, EIGHT }
 
-    public static ArrayList<int[]> findInnerContour(float[][] matrix, int i, int j, InnerBodyDefinition innerBodyDefinition, NeighbourFinder neighbourFinder) {
-        ArrayList<int[]> innerBoundary = new ArrayList<>();
-        ImageProcessing.findInnerContour(matrix, i, j, i, j, 0, 1, innerBoundary,innerBodyDefinition, neighbourFinder);
+    public static ArrayList<Point> findInnerContour(float[][] matrix, Point start, InnerBodyDefinition innerBodyDefinition,
+                                                    NeighbourFinder neighbourFinder) throws IllegalArgumentException {
+
+        if(!innerBodyDefinition.belongs(start, matrix)){
+            throw new IllegalArgumentException("Start pixel doesn't belong to inner body!");
+        }
+
+        ArrayList<Point> innerBoundary = new ArrayList<>();
+        ImageProcessing.findInnerContour(matrix, start, start, 0, 1, innerBoundary,innerBodyDefinition, neighbourFinder);
         return innerBoundary;
     }
 
-    public static void findInnerContour(float [][] matrix, int startI, int startJ, int curI, int curJ, int dirI, int dirJ,
-                                        ArrayList<int[]> contour, InnerBodyDefinition innerBodyDefinition, NeighbourFinder neighbourFinder) {
+    // TODO -
+    //  1. ASSUMING THE SHAPE IS CLOSED!
+    //  2. DOESN'T CORRECTLY HANDLE 1-PIXEL-WIDE BRIDGES
+    private static void findInnerContour(float [][] matrix, Point start, Point cur, int dirI, int dirJ,
+                                        ArrayList<Point> contour, InnerBodyDefinition innerBodyDefinition, NeighbourFinder neighbourFinder) {
 
-        if(contour.size() > 0 && startI == curI && startJ == curJ){
-            // Finished, currently purposely disregarding edge case of starting of 1-pixel-width bridges
+        if(contour.size() > 0 && start.equals(cur)){
+            // Finished, currently purposely disregarding edge case of starting at 1-pixel-wide bridges
             return;
         }
 
-        contour.add(new int[]{curI, curJ});
+        contour.add(cur);
 
-        for(int [] neighbour : neighbourFinder.directionRelativeClockwiseOrderedNeighbours(curI, curJ, dirI, dirJ, matrix)){
+        for(Point neighbour : neighbourFinder.findClockwiseNeighboursFromRelativeLeft(cur, dirI, dirJ)){
 
             // TODO add memoization to not re-traverse pixels
-            if(innerBodyDefinition.belongs(neighbour[0], neighbour[1], matrix)){
-                findInnerContour(matrix, startI, startJ, neighbour[0], neighbour[1], neighbour[0] - curI, neighbour[1] - curJ,
+            if(innerBodyDefinition.belongs(neighbour, matrix)){
+                findInnerContour(matrix, start, neighbour, neighbour.getRow() - cur.getRow(), neighbour.getCol() - cur.getCol(),
                         contour, innerBodyDefinition, neighbourFinder);
                 break;
             }
@@ -36,9 +46,4 @@ public class ImageProcessing {
         }
     }
 
-    private static void colorImage(float[][] image, ArrayList<int[]> indices, float color) {
-        for(int [] index : indices){
-            image[index[0]][index[1]] = color;
-        }
-    }
 }

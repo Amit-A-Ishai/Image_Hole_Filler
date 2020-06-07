@@ -1,10 +1,19 @@
 package com.amit.holedetection;
 
 import com.amit.model.Hole;
+import com.amit.model.Point;
 import com.amit.neighbourfinding.NeighbourFinder;
 
 import java.util.ArrayList;
 
+/**
+ * Naive implementation of hole detection
+ *
+ * For each pixel in the image:
+ * If it belongs to a hole, add to hole.
+ * Else, if it touches a hole pixel, add it to the boundary
+ *
+ * */
 public class NaiveHoleDetector extends HoleDetector {
 
     public NaiveHoleDetector(float holeValue) {
@@ -14,16 +23,16 @@ public class NaiveHoleDetector extends HoleDetector {
     @Override
     public Hole detect(float [][] matrix, NeighbourFinder neighbourFinder) {
 
-        ArrayList<int[]> boundary = new ArrayList<>();
-        ArrayList<int[]> body = new ArrayList<>();
+        ArrayList<Point> boundary = new ArrayList<>();
+        ArrayList<Point> body = new ArrayList<>();
 
         for(int i = 0; i < matrix.length; i++){
             for(int j = 0; j < matrix[0].length; j++){
 
                 if(isHoleBody(i, j, matrix)){
-                    body.add(new int[]{i, j});
+                    body.add(new Point(i, j));
                 } else if (isBoundary(i, j, matrix, neighbourFinder)){
-                    boundary.add(new int[]{i, j});
+                    boundary.add(new Point(i, j));
                 }
 
             }
@@ -32,15 +41,19 @@ public class NaiveHoleDetector extends HoleDetector {
         return new Hole(boundary, body);
     }
 
-    private boolean isBoundary(int i, int j, float[][] matrix, NeighbourFinder neighbourFinder) {
+    /**
+     * Checks if a pixel belongs to the hole boundary, meaning:
+     * The pixel is not a hole, but has a neighbour that is.
+     * */
+    private boolean isBoundary(int row, int col, float[][] matrix, NeighbourFinder neighbourFinder) {
 
-        if(isHoleBody(i, j, matrix)){
+        if(isHoleBody(row, col, matrix)){
             // TODO raise exception
             return false;
         }
 
-        for(int [] neighbour : neighbourFinder.find(i, j)){
-            if(isHoleBody(neighbour[0], neighbour[1], matrix)){
+        for(Point neighbour : neighbourFinder.find(row, col)){
+            if(isHoleBody(neighbour, matrix)){
                 return true;
             }
         }

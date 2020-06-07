@@ -1,5 +1,10 @@
 package com.amit;
 
+import com.amit.model.Point;
+
+/**
+ * Inner body definition, that simply checks the pixel value.
+ * */
 public class NumericInnerBodyDefinition implements InnerBodyDefinition {
 
     private final float bodyValue;
@@ -9,7 +14,7 @@ public class NumericInnerBodyDefinition implements InnerBodyDefinition {
     }
 
     @Override
-    public boolean belongs(int i, int j, float[][] matrix) {
-        return matrix[i][j] == bodyValue;
+    public boolean belongs(Point point, float[][] matrix) {
+        return matrix[point.getRow()][point.getCol()] == bodyValue;
     }
 }

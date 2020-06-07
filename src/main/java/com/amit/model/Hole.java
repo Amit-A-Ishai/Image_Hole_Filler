@@ -2,21 +2,27 @@ package com.amit.model;
 
 import java.util.ArrayList;
 
+/**
+ * Model for holding hole information
+ * */
 public class Hole {
 
-    private final ArrayList<int[]> boundary;
-    private final ArrayList<int[]> body;
+    // The outer boundary of the hole
+    private final ArrayList<Point> boundary;
 
-    public Hole(ArrayList<int[]> boundary, ArrayList<int[]> body) {
+    // The hole body pixels
+    private final ArrayList<Point> body;
+
+    public Hole(ArrayList<Point> boundary, ArrayList<Point> body) {
         this.boundary = boundary;
         this.body = body;
     }
 
-    public ArrayList<int[]> getBoundary() {
+    public ArrayList<Point> getBoundary() {
         return boundary;
     }
 
-    public ArrayList<int[]> getBody() {
+    public ArrayList<Point> getBody() {
         return body;
     }
 }

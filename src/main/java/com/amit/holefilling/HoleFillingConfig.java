@@ -1,22 +1,24 @@
 package com.amit.holefilling;
 
 import com.amit.ImageProcessing;
-import com.amit.pixelweightcalculation.EuclidianPixelWeightCalculator;
+import com.amit.pixelweightcalculation.EuclideanPixelWeightCalculator;
 import com.amit.pixelweightcalculation.PixelWeightCalculator;
 
+import static com.amit.Constants.*;
+
+/**
+ * Configuration object for hole filling
+ * */
 public class HoleFillingConfig {
 
     public enum DetectionAlgorithm { NAIVE, BFS_AND_FIND_CONTOUR }
 
-    private final static int Z_DEFAULT = 18;
-    private final static float EPSILON_DEFAULT = 0.00001f;
-
-    private DetectionAlgorithm detectionAlgorithm = DetectionAlgorithm.NAIVE;
-    private HoleFiller holeFiller = new NaiveHoleFiller();
-    private ImageProcessing.PixelConnectivity pixelConnectivity = ImageProcessing.PixelConnectivity.FOUR;
-    private float holeValue = -1; // default
-    private PixelWeightCalculator pixelWeightCalculator = new EuclidianPixelWeightCalculator(Z_DEFAULT, EPSILON_DEFAULT);
-    private float colorScaleFactor = 255f;
+    private DetectionAlgorithm detectionAlgorithm = DEFAULT_DETECTION_ALGORITHM;
+    private HoleFiller holeFiller = DEFAULT_HOLE_FILLER;
+    private ImageProcessing.PixelConnectivity pixelConnectivity = DEFAULT_PIXEL_CONNECTIVITY;
+    private float holeValue = DEFAULT_HOLE_VALUE;
+    private PixelWeightCalculator pixelWeightCalculator = new EuclideanPixelWeightCalculator(DEFAULT_Z, DEFAULT_EPSILON);
+    private float colorScaleFactor = DEFAULT_COLOR_SCALE_FACTOR;
 
     public HoleFillingConfig setDetectionAlgorithm(DetectionAlgorithm detectionAlgorithm) {
         this.detectionAlgorithm = detectionAlgorithm;

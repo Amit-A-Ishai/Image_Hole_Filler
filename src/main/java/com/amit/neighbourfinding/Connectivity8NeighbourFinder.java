@@ -1,6 +1,9 @@
 package com.amit.neighbourfinding;
 
-public class Connectivity8NeighbourFinder extends IndexBasedNeighbourFinder {
+/**
+ * Finds the 8-connected neighbours
+ * */
+public class Connectivity8NeighbourFinder extends NeighbourFinder {
 
     private final static int [][] INDEX_MASKS =
             {
@@ -24,8 +27,7 @@ public class Connectivity8NeighbourFinder extends IndexBasedNeighbourFinder {
     }
 
     @Override
-    int[][] getNeighbourIndexMasks() {
+    protected int[][] getNeighbourIndexMasks() {
         return INDEX_MASKS;
     }
-
 }
